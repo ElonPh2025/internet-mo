@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>INTERNET MO — Are you overpaying for fiber?</title>
+<style>
+  :root{
+    --bg:#FAF9F7;
+    --ink:#1F1E1C;
+    --ink-2:#55524C;
+    --line:#E8E4DC;
+    --accent:#C96442;
+    --accent-soft:#F3E1D6;
+    --good:#4A7C59;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size:17px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:680px;
+    margin:0 auto;
+    padding:64px 28px 96px;
+  }
+  header .tag{
+    display:inline-block;
+    color:var(--accent);
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  h1{
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight:500;
+    font-size:40px;
+    line-height:1.1;
+    letter-spacing:-.01em;
+    margin:0 0 14px;
+  }
+  h1 em{ color:var(--accent); font-style:normal; }
+  .lede{
+    color:var(--ink-2);
+    font-size:18px;
+    margin:0 0 40px;
+    max-width:58ch;
+  }
+  h2{
+    font-size:13px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    font-weight:600;
+    margin:36px 0 14px;
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 22px 6px;
+    margin-bottom:20px;
+  }
+  label{
+    display:block;
+    font-size:14px;
+    color:var(--ink-2);
+    margin:14px 0 6px;
+    font-weight:500;
+  }
+  input[type=number], select{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#FDFCFA;
+    color:var(--ink);
+    font-size:16px;
+    font-family:inherit;
+    outline:none;
+    transition:border-color .15s;
+  }
+  input[type=number]:focus, select:focus{
+    border-color:var(--accent);
+  }
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media (max-width:520px){ .row{grid-template-columns:1fr} h1{font-size:32px} .wrap{padding:40px 20px 72px} }
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 16px}
+  .chip{
+    border:1px solid var(--line);
+    background:#FDFCFA;
+    padding:9px 14px;
+    border-radius:999px;
+    font-size:14px;
+    cursor:pointer;
+    user-select:none;
+    transition:all .15s;
+  }
+  .chip.on{
+    background:var(--accent-soft);
+    border-color:var(--accent);
+    color:var(--accent);
+    font-weight:600;
+  }
+  button.go{
+    width:100%;
+    padding:16px;
+    background:var(--ink);
+    color:#fff;
+    border:0;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:10px;
+    letter-spacing:.01em;
+  }
+  button.go:hover{ background:var(--accent); }
+  .result{
+    margin-top:28px;
+    padding:24px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#fff;
+  }
+  .result h3{
+    margin:0 0 6px;
+    font-family: Georgia, serif;
+    font-size:26px;
+    font-weight:500;
+  }
+  .result .big{
+    font-family: Georgia, serif;
+    font-size:42px;
+    line-height:1.05;
+    color:var(--accent);
+    margin:8px 0 4px;
+  }
+  .result .sub{ color:var(--ink-2); font-size:14px; margin-bottom:14px }
+  .meter{
+    height:10px;
+    background:var(--accent-soft);
+    border-radius:999px;
+    overflow:hidden;
+    margin:10px 0 4px;
+  }
+  .meter span{
+    display:block;
+    height:100%;
+    background:var(--accent);
+    border-radius:999px;
+  }
+  .verdict{
+    padding:14px 16px;
+    border-radius:10px;
+    background:#FDFCFA;
+    border:1px solid var(--line);
+    margin:16px 0;
+    font-size:15px;
+  }
+  .prompt{
+    background:#1F1E1C;
+    color:#F3E1D6;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size:13px;
+    line-height:1.6;
+    padding:18px;
+    border-radius:10px;
+    white-space:pre-wrap;
+    word-break:break-word;
+    margin-top:10px;
+  }
+  .copy{
+    margin-top:10px;
+    padding:10px 14px;
+    background:var(--accent-soft);
+    border:1px solid var(--accent);
+    color:var(--accent);
+    border-radius:8px;
+    font-weight:600;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .copy.ok{ background:var(--accent); color:#fff }
+  footer{
+    margin-top:56px;
+    color:var(--ink-2);
+    font-size:13px;
+    text-align:center;
+  }
+  footer a{ color:var(--accent); text-decoration:none }
+  .hidden{ display:none }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="tag">Day 9 · Filipino Household AI Tools</div>
+      <h1>INTERNET <em>MO</em>.</h1>
+      <p class="lede">Most Filipino households are paying for way more Mbps than they actually use. Takes 30 seconds to check if your fiber plan is right-sized — or if you're quietly lighting up ₱500 a month.</p>
+    </header>
+
+    <section class="card">
+      <h2>Your current plan</h2>
+      <div class="row">
+        <div>
+          <label>Monthly bill (₱)</label>
+          <input id="bill" type="number" inputmode="numeric" placeholder="e.g. 1699" />
+        </div>
+        <div>
+          <label>Advertised speed (Mbps)</label>
+          <input id="speed" type="number" inputmode="numeric" placeholder="e.g. 200" />
+        </div>
+      </div>
+      <label>Provider</label>
+      <select id="isp">
+        <option value="">Select one —</option>
+        <option>PLDT Home Fiber</option>
+        <option>Globe At Home</option>
+        <option>Converge FiberX</option>
+        <option>Sky Fiber</option>
+        <option>DITO Home</option>
+        <option>Streamtech / RISE</option>
+        <option>Mobile data only (Globe/Smart/DITO prepaid)</option>
+        <option>Other</option>
+      </select>
+    </section>
+
+    <section class="card">
+      <h2>How your household actually uses it</h2>
+
+      <label>Number of people online at peak hours</label>
+      <div class="chips" id="people">
+        <div class="chip" data-v="1">Just me</div>
+        <div class="chip" data-v="2">2</div>
+        <div class="chip" data-v="3">3</div>
+        <div class="chip" data-v="4">4</div>
+        <div class="chip" data-v="6">5+</div>
+      </div>
+
+      <label>What happens on a normal night (tap all that apply)</label>
+      <div class="chips" id="usage">
+        <div class="chip" data-v="stream">Netflix / YouTube HD</div>
+        <div class="chip" data-v="4k">4K streaming</div>
+        <div class="chip" data-v="wfh">Work-from-home (Zoom/Meet)</div>
+        <div class="chip" data-v="class">Kids online class</div>
+        <div class="chip" data-v="game">Online gaming</div>
+        <div class="chip" data-v="tiktok">Scrolling TikTok/FB</div>
+        <div class="chip" data-v="download">Big downloads (games, files)</div>
+      </div>
+
+      <label>Outages per month (dropouts that make you call the hotline)</label>
+      <div class="chips" id="outage">
+        <div class="chip" data-v="0">None</div>
+        <div class="chip" data-v="1">1–2</div>
+        <div class="chip" data-v="3">3–5</div>
+        <div class="chip" data-v="6">Constantly</div>
+      </div>
+
+      <button class="go" id="go">Check my plan →</button>
+    </section>
+
+    <section id="out" class="hidden">
+      <div class="result">
+        <h3>What you actually need</h3>
+        <div class="big"><span id="need">—</span> Mbps</div>
+        <div class="sub">Based on your household and usage pattern.</div>
+        <div class="meter"><span id="bar" style="width:0%"></span></div>
+        <div class="sub"><span id="ratio">—</span> of your plan's advertised speed.</div>
+
+        <div class="verdict" id="verdict">—</div>
+
+        <h2 style="margin-top:24px">Ready-to-paste prompt</h2>
+        <p class="sub">Drop this into Claude (or any AI) for a personalized recommendation — which plan to downgrade to, which to keep, and what to tell the retention agent when you call to cancel.</p>
+        <div class="prompt" id="prompt">—</div>
+        <button class="copy" id="copy">Copy prompt</button>
+      </div>
+    </section>
+
+    <footer>
+      Part of the <strong>Filipino Household AI Tools</strong> series · one tiny tool a day.<br/>
+      No signup, no tracking, no backend. Everything runs in your browser.
+    </footer>
+  </div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const chips = (sel, multi=false) => {
+    const group = document.querySelectorAll(sel + ' .chip');
+    group.forEach(c => c.addEventListener('click', () => {
+      if(multi){ c.classList.toggle('on'); }
+      else { group.forEach(g => g.classList.remove('on')); c.classList.add('on'); }
+    }));
+    return () => {
+      const on = [...group].filter(c => c.classList.contains('on')).map(c => c.dataset.v);
+      return multi ? on : (on[0] || null);
+    };
+  };
+  const getPeople  = chips('#people');
+  const getUsage   = chips('#usage', true);
+  const getOutage  = chips('#outage');
+
+  function estimateMbps(people, usage){
+    // Rough, honest estimates (Mbps per concurrent activity)
+    const w = {
+      stream:   5,   // HD
+      '4k':     25,  // 4K
+      wfh:      4,
+      class:    3,
+      game:     3,   // actual bandwidth is low; ping matters more
+      tiktok:   3,
+      download: 15   // spiky, not sustained
+    };
+    // Base overhead per active person
+    let need = Math.max(1, people) * 2;
+    usage.forEach(u => { need += (w[u] || 0); });
+    // Headroom 30%
+    need = Math.ceil(need * 1.3);
+    return need;
+  }
+
+  $('#go').addEventListener('click', () => {
+    const bill  = parseFloat($('#bill').value) || 0;
+    const speed = parseFloat($('#speed').value) || 0;
+    const isp   = $('#isp').value || 'your provider';
+    const people = parseInt(getPeople() || '2', 10);
+    const usage  = getUsage();
+    const outage = getOutage() || '0';
+
+    if(!bill || !speed){
+      alert('Please enter your bill and advertised speed.');
+      return;
+    }
+
+    const need = estimateMbps(people, usage);
+    const ratio = speed > 0 ? (need / speed) : 0;
+    const pct = Math.min(100, Math.round(ratio * 100));
+
+    $('#need').textContent = need;
+    $('#ratio').textContent = pct + '%';
+    $('#bar').style.width = pct + '%';
+
+    let verdict = '';
+    let savingsLine = '';
+    if(ratio < 0.35){
+      const suggested = Math.max(50, Math.ceil(need / 25) * 25);
+      const est = Math.round(bill * 0.55);
+      verdict = `You are almost certainly overpaying. A ~${suggested} Mbps plan would cover your household with headroom. Likely savings: around ₱${(bill - est).toLocaleString()}/month if you downgrade.`;
+      savingsLine = `Potential monthly savings: ~₱${(bill - est).toLocaleString()}.`;
+    } else if(ratio < 0.7){
+      verdict = `Fair fit, slight headroom. You could downgrade one tier and not feel it — or keep this plan if you value the buffer.`;
+      savingsLine = 'Possible small savings if you downgrade one tier.';
+    } else if(ratio <= 1.1){
+      verdict = `Well-matched plan. This is the right speed for your household — don't let a salesperson upsell you.`;
+      savingsLine = 'No obvious savings from speed. Audit bundled add-ons (landline, Disney+, cable) instead.';
+    } else {
+      verdict = `You're under-provisioned. Your usage regularly exceeds your plan — that's why it feels slow at night. Upgrade one tier OR cut one heavy activity during peak hours.`;
+      savingsLine = 'Upgrade, not downgrade — but shop around before renewing.';
+    }
+
+    const outageNote = outage === '0' ? 'connection is stable'
+                    : outage === '1' ? 'has occasional dropouts'
+                    : outage === '3' ? 'has frequent dropouts (3–5/month)'
+                    : 'drops constantly';
+
+    $('#verdict').textContent = verdict;
+
+    const prompt = `I'm a Filipino household subscriber to ${isp}.
+- Monthly bill: ₱${bill.toLocaleString()}
+- Advertised speed: ${speed} Mbps
+- People online at peak: ${people}
+- Typical activities: ${usage.length ? usage.join(', ') : 'light browsing only'}
+- My connection ${outageNote}.
+
+A quick estimate says my household really only needs about ${need} Mbps, which is ${pct}% of what I'm paying for.
+
+${savingsLine}
+
+Please:
+1. Tell me honestly if I should downgrade, keep, or switch providers.
+2. Suggest 2–3 specific plans from PLDT, Globe, or Converge that would fit my real usage.
+3. Give me the exact script to say to the retention agent when I call to downgrade or cancel — including the one line that usually unlocks a better offer.
+4. Flag any bundled add-ons (landline, streaming, cable) I'm probably paying for but not using.
+Keep it short and specific to the Philippines.`;
+
+    $('#prompt').textContent = prompt;
+    $('#out').classList.remove('hidden');
+    $('#out').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  $('#copy').addEventListener('click', async () => {
+    const btn = $('#copy');
+    try {
+      await navigator.clipboard.writeText($('#prompt').textContent);
+      btn.textContent = 'Copied ✓';
+      btn.classList.add('ok');
+      setTimeout(()=>{ btn.textContent = 'Copy prompt'; btn.classList.remove('ok'); }, 2000);
+    } catch(e){
+      btn.textContent = 'Press Cmd/Ctrl+C';
+    }
+  });
+})();
+</script>
+</body>
+</html>
